@@ -1,0 +1,34 @@
+
+# ============================================
+# Configuration for Call Volume Forecasting Project
+# ============================================
+
+# Paths
+paths:
+  input_data: "data/data_inputs"        # Directory for input CSV files
+  output_data: "data/data_outputs"      # Directory for forecast outputs
+  monthly_forecast_file: "monthly_forecast.csv"
+  weekly_forecast_file: "weekly_forecast.csv"
+
+# Forecast Parameters
+forecast:
+  membership_periods: 12                # Number of months to forecast for membership
+  call_volume_years: [2026, 2027]       # Years for call volume forecast
+  confidence_interval: 0.95             # Confidence interval for forecasts
+  weeks_per_month: 4.345                # Average weeks per month for weekly breakdown
+
+# Contact Rate
+contact_rate:
+  default: 0.45                         # Default annual contact rate if missing
+  min: 0.3                              # Minimum allowed in sensitivity analysis
+  max: 0.6                              # Maximum allowed in sensitivity analysis
+
+# Streamlit UI Settings
+ui:
+  enable_plotly: true                   # Use Plotly for interactive charts
+  tabs: ["Overview", "Sensitivity Analysis", "Forecast Charts"]
+
+# Logging
+logging:
+  level: "INFO"                         # Options: DEBUG, INFO, WARNING, ERROR
+  log_file: "logs/project.log"          # Log file path
