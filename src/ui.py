@@ -1,10 +1,27 @@
 import streamlit as st
+import pandas as pd
 import plotly.express as px
 
-def build_dashboard(monthly_forecast, weekly_forecast, contact_rate):
-    """Streamlit dashboard for multi-LOB sensitivity analysis and visualization."""
+# Paths to output files
+MONTHLY_FILE = "data/data_outputs/monthly_forecast.csv"
+WEEKLY_FILE = "data/data_outputs/weekly_forecast.csv"
+
+def load_forecast_data():
+    """Load monthly and weekly forecast data from CSV files."""
+    monthly_df = pd.read_csv(MONTHLY_FILE)
+    weekly_df = pd.read_csv(WEEKLY_FILE)
     
+    # Ensure date columns are parsed correctly
+    monthly_df['ds'] = pd.to_datetime(monthly_df['ds'])
+    weekly_df['Week_Start'] = pd.to_datetime(weekly_df['Week_Start'])
+    
+    return monthly_df, weekly_df
+
+def build_dashboard():
     st.title("📊 Multi-LOB Call Volume Forecast Dashboard")
+    
+    # Load data
+    monthly_forecast, weekly_forecast = load_forecast_data()
     
     # Sidebar: LOB selection
     lob_options = monthly_forecast['LOB'].unique()
@@ -43,7 +60,7 @@ def build_dashboard(monthly_forecast, weekly_forecast, contact_rate):
     with tab2:
         st.subheader("Adjust Parameters for Sensitivity Analysis")
         membership_input = st.slider("Membership Count", 150000, 200000, 170000)
-        contact_rate_input = st.slider("Contact Rate", 0.3, 0.6, contact_rate)
+        contact_rate_input = st.slider("Contact Rate", 0.3, 0.6, 0.45)
         
         adjusted_weekly_volume = (membership_input * contact_rate_input / 12) / 4.345
         st.metric("Adjusted Weekly Call Volume (per LOB)", f"{adjusted_weekly_volume:,.0f}")
@@ -70,3 +87,7 @@ def build_dashboard(monthly_forecast, weekly_forecast, contact_rate):
             facet_col='LOB'
         )
         st.plotly_chart(fig_ci, use_container_width=True)
+
+# Run the dashboard
+if __name__ == "__main__":
+    build_dashboard()
