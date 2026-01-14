@@ -3,6 +3,9 @@ import pandas as pd
 def apply_weekly_seasonality(monthly_forecast: pd.DataFrame, historical_df: pd.DataFrame) -> pd.DataFrame:
     """Distribute monthly call volume into weeks using seasonality-adjusted weights."""
     # Compute weights from historical data
+    historical_df['Historical_Call_Volume'] = pd.to_numeric(historical_df['Historical_Call_Volume'], errors='coerce')
+    
+    historical_df.dropna(subset=['Historical_Call_Volume'], inplace=True)
     historical_df['Month'] = historical_df['Date'].dt.month
     historical_df['Week'] = historical_df['Date'].dt.isocalendar().week
     weekly_pattern = (
