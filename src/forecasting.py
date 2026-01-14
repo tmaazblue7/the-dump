@@ -1,6 +1,8 @@
 from prophet import Prophet
 import pandas as pd
 
+
+
 def forecast_membership(df: pd.DataFrame, periods: int = 12) -> pd.DataFrame:
     """Forecast membership using Prophet."""
     membership_df = df[['Date', 'Membership_Count']].dropna()

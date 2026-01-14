@@ -27,6 +27,23 @@ def main():
     
     # Streamlit UI
     build_dashboard(monthly_forecast, weekly_forecast, contact_rate)
+    
+    # Sidebar LOB selection
+    lob_options = df['LOB'].unique()
+    selected_lob = st.sidebar.selectbox("Select Line of Business (LOB):", lob_options)
+
+    # Filter forecasts by LOB
+    lob_monthly_forecast = monthly_forecast[monthly_forecast['LOB'] == selected_lob]
+    lob_weekly_forecast = weekly_forecast[weekly_forecast['LOB'] == selected_lob]
+
+    # Display charts for selected LOB
+    st.subheader(f"Forecast for {selected_lob}")
+    fig_monthly = px.line(lob_monthly_forecast, x='ds', y='Monthly_Call_Volume', title=f'Monthly Forecast - {selected_lob}')
+    st.plotly_chart(fig_monthly)
+
+    fig_weekly = px.line(lob_weekly_forecast, x='Week_Start', y='Estimated_Weekly_Call_Volume', title=f'Weekly Forecast - {selected_lob}')
+    st.plotly_chart(fig_weekly)
+
 
 if __name__ == "__main__":
     main()
