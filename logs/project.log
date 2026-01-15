@@ -48,3 +48,103 @@
 2026-01-15 16:16:28,417 INFO prophet - n_changepoints greater than number of observations. Using 18.
 2026-01-15 16:16:28,421 INFO cmdstanpy - Chain [1] start processing
 2026-01-15 16:16:38,299 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:24:24,282 INFO root - Configuration loaded from config/config.yaml
+2026-01-15 16:24:24,357 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:24:24,358 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:24:24,389 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:24:24,632 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:24:24,713 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:24:24,713 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:24:24,721 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:24:24,724 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:24:34,595 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:24:34,665 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:24:34,666 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:24:34,673 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:24:34,676 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:24:44,470 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:24:44,524 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:24:44,524 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:24:44,531 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:24:44,535 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:24:54,323 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:24:54,435 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:24:54,435 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:24:54,445 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:24:54,448 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:25:04,943 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:25:04,995 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:25:04,996 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:25:05,003 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:25:05,006 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:25:14,755 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:25:14,810 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:25:14,810 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:25:14,817 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:25:14,821 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:25:25,081 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:25:25,135 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:25:25,135 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:25:25,142 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:25:25,146 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:25:35,221 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:25:35,272 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:25:35,272 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:25:35,279 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:25:35,282 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:25:45,137 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:33:14,356 INFO root - Configuration loaded from config/config.yaml
+2026-01-15 16:33:14,397 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:33:14,398 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:33:14,413 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:33:14,693 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:33:14,785 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:33:14,785 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:33:14,795 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:33:14,799 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:33:24,652 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:33:24,708 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:33:24,708 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:33:24,715 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:33:24,718 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:33:34,515 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:33:34,572 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:33:34,572 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:33:34,579 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:33:34,582 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:33:44,806 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:33:44,868 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:33:44,868 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:33:44,875 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:33:44,879 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:33:54,627 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:33:54,683 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:33:54,684 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:33:54,690 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:33:54,694 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:34:04,783 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:34:04,839 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:34:04,839 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:34:04,846 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:34:04,849 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:34:14,695 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:34:14,750 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:34:14,750 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:34:14,757 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:34:14,760 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:34:24,467 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:34:24,523 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:34:24,523 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:34:24,529 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:34:24,533 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:34:34,567 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:34:34,612 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:34:34,612 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:34:34,619 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:34:34,622 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:34:44,473 INFO cmdstanpy - Chain [1] done processing
+2026-01-15 16:34:44,530 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 16:34:44,530 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 16:34:44,536 INFO prophet - n_changepoints greater than number of observations. Using 18.
+2026-01-15 16:34:44,540 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 16:34:54,380 INFO cmdstanpy - Chain [1] done processing
