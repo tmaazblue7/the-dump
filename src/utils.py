@@ -29,25 +29,34 @@ def load_config(config_path: str):
 # -------------------------------
 # 2. Logging Setup
 # -------------------------------
-from __future__ import annotations
 
 import logging
 import sys
 from pathlib import Path
-from logging.handlers import RotatingFileHandler  # optional if you want rotation
+from logging.handlers import RotatingFileHandler
 
-def setup_logging(log_level: str = "INFO", log_file: str | None = None, rotate: bool = False) -> None:
+def setup_logging(log_level: str = "INFO",
+                  log_file: str | None = "logs/project.log",
+                  rotate: bool = False) -> None:
     """
-    Configure logging to stdout and optionally to a file.
-    - Creates the log directory if it doesn't exist.
-    - Resolves relative paths relative to the repo root (…/the-dump/).
-    - Supports optional log rotation.
+    Configure logging to stdout and (optionally) to a file.
+    - Ensures the log directory exists to avoid FileNotFoundError.
+    - Resolves relative file paths to the repository root (…/the-dump/).
+    - Optionally enables log rotation.
     """
-    # Level
+    # Determine level (fallback to INFO if invalid)
     level = getattr(logging, log_level.upper(), logging.INFO)
 
+    # Create a consistent formatter
+    formatter = logging.Formatter(
+        fmt="%(asctime)s %(levelname)s %(name)s - %(message)s"
+    )
+
     # Always log to stdout
-    handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout)]
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(level)
+    stdout_handler.setFormatter(formatter)
+    handlers: list[logging.Handler] = [stdout_handler]
 
     # If a log file is requested, resolve and ensure directory exists
     if log_file:
@@ -56,8 +65,7 @@ def setup_logging(log_level: str = "INFO", log_file: str | None = None, rotate: 
         log_path = Path(log_file)
         if not log_path.is_absolute():
             log_path = repo_root / log_path
-
-        # Ensure the directory exists
+        # Ensure logs/ exists
         log_path.parent.mkdir(parents=True, exist_ok=True)
 
         if rotate:
@@ -66,16 +74,12 @@ def setup_logging(log_level: str = "INFO", log_file: str | None = None, rotate: 
             )
         else:
             file_handler = logging.FileHandler(log_path, encoding="utf-8")
-
+        file_handler.setLevel(level)
+        file_handler.setFormatter(formatter)
         handlers.append(file_handler)
 
-    # Use `handlers` rather than `filename` so we can add stdout + file
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s %(levelname)s %(name)s - %(message)s",
-        handlers=handlers,
-        force=True,  # overwrite any prior basicConfig calls (Python 3.12 supports this)
-    )
+    # Configure root logger with our handlers; force=True replaces prior config
+    logging.basicConfig(level=level, handlers=handlers, force=True)
 
 # -------------------------------
 # 3. Save DataFrame to CSV

@@ -1,0 +1,5 @@
+2026-01-15 15:55:09,241 INFO root - Configuration loaded from config/config.yaml
+2026-01-15 15:55:09,470 INFO prophet - Disabling weekly seasonality. Run prophet with weekly_seasonality=True to override this.
+2026-01-15 15:55:09,470 INFO prophet - Disabling daily seasonality. Run prophet with daily_seasonality=True to override this.
+2026-01-15 15:55:09,543 INFO cmdstanpy - Chain [1] start processing
+2026-01-15 15:55:10,102 INFO cmdstanpy - Chain [1] done processing

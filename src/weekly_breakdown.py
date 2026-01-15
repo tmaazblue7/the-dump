@@ -1,4 +1,4 @@
-
+import pandas as pd
 def apply_weekly_seasonality(monthly_forecast, historical_df):
     historical_df['Historical_Call_Volume'] = pd.to_numeric(historical_df['Historical_Call_Volume'], errors='coerce')
     historical_df.dropna(subset=['Historical_Call_Volume'], inplace=True)
