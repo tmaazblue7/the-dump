@@ -1,0 +1,69 @@
+mkdir -p .github/workflows
+
+cat > .github/workflows/ci.yml <<'YAML'
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      run_slow:
+        description: 'Run slow Prophet tests (requires RUN_SLOW=1)'
+        type: boolean
+        default: false
+
+jobs:
+  tests-fast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Minimal set for the tests you added; prophet is import-only in fast tests
+          pip install pytest pandas prophet
+
+      - name: Run fast tests (Prophet mocked)
+        env:
+          RUN_SLOW: '0'
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          pytest -q
+
+  tests-slow:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_slow == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pandas prophet
+
+      - name: Run slow Prophet test only
+        env:
+          RUN_SLOW: '1'
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          pytest -q -m slow
+YAML
+
+git add .github/workflows/ci.yml
+git commit -m "ci: add GitHub Actions workflow for fast tests + optional slow Prophet test"
