@@ -1,6 +1,0 @@
-diff --git a/src/weekly_breakdown.py b/src/weekly_breakdown.py
-index 3b3b3b3..4c4c4c4 100644
---- a/src/weekly_breakdown.py
-+++ b/src/weekly_breakdown.py
-@@
-+import pandas as pd
