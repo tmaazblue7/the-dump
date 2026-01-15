@@ -27,7 +27,7 @@ def main():
 
     for lob in lobs:
         lob_df = df[df['LOB'] == lob]
-        contact_rate = lob_df['Annual_Contact_Rate'].dropna().mean() or contact_rate_default
+        contact_rate = lob_df['Annual_Contact_Rate'].dropna().mean()
 
         # Forecast membership
         membership_forecast = forecast_membership(lob_df, periods=config['forecast']['membership_periods'])

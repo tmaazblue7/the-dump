@@ -29,19 +29,53 @@ def load_config(config_path: str):
 # -------------------------------
 # 2. Logging Setup
 # -------------------------------
-def setup_logging(log_level: str = "INFO", log_file: str = None):
+from __future__ import annotations
+
+import logging
+import sys
+from pathlib import Path
+from logging.handlers import RotatingFileHandler  # optional if you want rotation
+
+def setup_logging(log_level: str = "INFO", log_file: str | None = None, rotate: bool = False) -> None:
     """
-    Configure logging for the project.
-    Args:
-        log_level (str): Logging level (DEBUG, INFO, WARNING, ERROR).
-        log_file (str): Optional path to log file.
+    Configure logging to stdout and optionally to a file.
+    - Creates the log directory if it doesn't exist.
+    - Resolves relative paths relative to the repo root (…/the-dump/).
+    - Supports optional log rotation.
     """
+    # Level
+    level = getattr(logging, log_level.upper(), logging.INFO)
+
+    # Always log to stdout
+    handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout)]
+
+    # If a log file is requested, resolve and ensure directory exists
+    if log_file:
+        # utils.py is in src/, so repo root is parents[1]
+        repo_root = Path(__file__).resolve().parents[1]
+        log_path = Path(log_file)
+        if not log_path.is_absolute():
+            log_path = repo_root / log_path
+
+        # Ensure the directory exists
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if rotate:
+            file_handler = RotatingFileHandler(
+                log_path, maxBytes=2_000_000, backupCount=5, encoding="utf-8"
+            )
+        else:
+            file_handler = logging.FileHandler(log_path, encoding="utf-8")
+
+        handlers.append(file_handler)
+
+    # Use `handlers` rather than `filename` so we can add stdout + file
     logging.basicConfig(
-        level=getattr(logging, log_level.upper(), logging.INFO),
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        filename=log_file if log_file else None
+        level=level,
+        format="%(asctime)s %(levelname)s %(name)s - %(message)s",
+        handlers=handlers,
+        force=True,  # overwrite any prior basicConfig calls (Python 3.12 supports this)
     )
-    logging.info("Logging initialized.")
 
 # -------------------------------
 # 3. Save DataFrame to CSV
