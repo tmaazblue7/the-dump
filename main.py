@@ -1,70 +1,93 @@
-from src.data_preprocessing import load_and_merge_csv
-from src.forecasting import forecast_membership, forecast_call_volume
-from src.weekly_breakdown import apply_weekly_seasonality
-from src.utils import load_config, setup_logging, save_dataframe
+
+from prophet import Prophet
 import pandas as pd
-import os
-from pathlib import Path
+import logging
 
-def main():
-    # Initialize logging
-    setup_logging(log_level="INFO", log_file="logs/project.log")
+logger = logging.getLogger(__name__)
 
-    # Load config
-    config = load_config("config/config.yaml")
+def forecast_membership(
+    df: pd.DataFrame,
+    periods: int = 12,
+    date_col: str = "Date",
+    value_col: str = "Membership_Count",
+    fallback_on_insufficient: bool = True,
+) -> pd.DataFrame:
+    """
+    Forecast membership as a monthly stock series using Prophet.
 
-    # Example usage
-    input_path = config['paths']['input_data']
-    output_path = config['paths']['output_data']
-    
-    # Ensure output directory exists
-    Path(output_path).mkdir(parents=True, exist_ok=True)
+    - Cleans date/value columns
+    - Aggregates to month-end (last value in month)
+    - Validates at least 2 observations before fitting
+    - Uses MonthEnd offsets (version-proof vs 'M'/'ME' alias differences)
+    """
+    # 1) Validate schema
+    missing = [c for c in (date_col, value_col) if c not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
 
-    # Load data
-    df = load_and_merge_csv(input_path)
-    lobs = df['LOB'].unique()
+    data = df[[date_col, value_col]].copy()
 
-    monthly_results = []
-    weekly_results = []
-
-    for lob in lobs:
-        lob_df = df[df['LOB'] == lob].copy()
-        contact_rate = lob_df['Annual_Contact_Rate'].dropna().mean()
-        
-        # Use default contact rate if all values are NaN
-        if pd.isna(contact_rate):
-            contact_rate = config['contact_rate'].get('default', 0.45)
-
-        # Membership Forecast
-        membership_forecast = forecast_membership(
-            lob_df,
-            periods=config['forecast']['membership_periods'],
-            fallback_on_insufficient=False,  # <-- fail hard
+    # 2) Coerce numeric Membership_Count (strip non-numeric if needed)
+    if data[value_col].dtype == object:
+        data[value_col] = (
+            data[value_col]
+            .astype(str)
+            .str.replace(r"[^0-9+\\-\\.]", "", regex=True)
         )
+    data[value_col] = pd.to_numeric(data[value_col], errors="coerce")
 
-        # Monthly call volume
-        monthly_forecast = forecast_call_volume(membership_forecast[['ds', 'yhat']], contact_rate)
-        monthly_forecast['LOB'] = lob
-        monthly_forecast['Forecasted_Membership'] = monthly_forecast['yhat']
-        monthly_forecast['lower_ci'] = monthly_forecast['Monthly_Call_Volume'] * 0.95
-        monthly_forecast['upper_ci'] = monthly_forecast['Monthly_Call_Volume'] * 1.05
-        monthly_forecast['Contact_Rate'] = contact_rate
-        monthly_forecast['Model'] = 'Prophet'
-        monthly_results.append(monthly_forecast)
+    # 3) Parse dates
+    data[date_col] = pd.to_datetime(data[date_col], errors="coerce")
 
-        # Weekly breakdown
-        weekly_forecast = apply_weekly_seasonality(monthly_forecast, lob_df)
-        weekly_forecast['LOB'] = lob
-        weekly_results.append(weekly_forecast)
+    # 4) Drop invalid
+    data = data.dropna(subset=[date_col, value_col]).copy()
+    if data.empty:
+        raise ValueError("No valid data for membership forecast after cleaning.")
 
-    # Combine and save
-    monthly_df = pd.concat(monthly_results, ignore_index=True)
-    weekly_df = pd.concat(weekly_results, ignore_index=True)
+    # 5) Aggregate to month-end last (unique ds)
+    me = pd.offsets.MonthEnd(1)
+    monthly = (
+        data.sort_values(date_col)
+            .set_index(date_col)[[value_col]]
+            .resample(me).last()
+            .dropna()
+            .rename(columns={value_col: "y"})
+    )
+    monthly.index.name = "ds"
+    history = monthly.reset_index()[["ds", "y"]]
 
-    monthly_df.to_csv(f"{output_path}/{config['paths']['monthly_forecast_file']}", index=False)
-    weekly_df.to_csv(f"{output_path}/{config['paths']['weekly_forecast_file']}", index=False)
+    # 6) Validate length
+    if len(history) < 2:
+        msg = f"Insufficient membership history after monthly aggregation: {len(history)} rows."
+        if fallback_on_insufficient:
+            logger.warning("%s Returning a naive flat forecast.", msg)
+            last_ds = history["ds"].max() if len(history) else pd.Timestamp.today().normalize()
+            last_y = float(history["y"].iloc[-1]) if len(history) else 0.0
+            future_ds = pd.date_range(last_ds, periods=periods, freq=me, inclusive="right")
+            out = pd.DataFrame({
+                "ds": future_ds,
+                "yhat": [last_y] * periods,
+                "yhat_lower": [last_y] * periods,
+                "yhat_upper": [last_y] * periods,
+            })
+            return out
+        else:
+            raise ValueError(msg)
 
-    print("✅ Forecast files generated successfully!")
+    # 7) Fit Prophet (monthly → no weekly/daily; cap changepoints for short series)
+    n_cp = max(0, min(10, len(history) - 2))
+    m = Prophet(
+        yearly_seasonality=True,
+        weekly_seasonality=False,
+        daily_seasonality=False,
+        n_changepoints=n_cp,
+        growth="linear",
+    )
+    # Quiet libraries if desired
+    logging.getLogger("prophet").setLevel(logging.WARNING)
+    logging.getLogger("cmdstanpy").setLevel(logging.WARNING)
 
-if __name__ == "__main__":
-    main()
+    m.fit(history)
+    future = m.make_future_dataframe(periods=periods, freq=me, include_history=False)
+    forecast = m.predict(future)
+    return forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]].copy()
