@@ -2,7 +2,9 @@ import pandas as pd
 import glob
 
 def load_and_merge_csv(input_path: str) -> pd.DataFrame:
+
     """Load and merge multiple CSV files into a single DataFrame."""
+    
     files = glob.glob(f"{input_path}/*.csv")
     if not files:
         raise FileNotFoundError("No CSV files found in the specified directory.")

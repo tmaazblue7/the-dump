@@ -3,6 +3,7 @@ from src.forecasting import forecast_membership, forecast_call_volume
 from src.weekly_breakdown import apply_weekly_seasonality
 from src.utils import load_config
 import pandas as pd
+from prophet import Prophet
 
 def main():
     # Load config

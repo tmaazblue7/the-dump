@@ -42,7 +42,22 @@ def _get_month_weights(weekly_pattern: "pd.DataFrame | pd.Series", month_num: in
     if not total or total <= 0:
         return [0.25, 0.25, 0.25, 0.25]
     return [float(v)/float(total) if pd.notna(v) else 0.0 for v in vals]
+
 def apply_weekly_seasonality(monthly_forecast, historical_df):
+    
+    # 1) Start with a copy (if historical_df comes from a slice)
+    historical_df = historical_df.copy()
+
+    # 2) Coerce to numeric (return a new df)
+    historical_df = historical_df.assign(
+        Historical_Call_Volume=pd.to_numeric(
+            historical_df['Historical_Call_Volume'], errors='coerce'
+        )   
+    )
+
+    # 3) Drop NaN and take a copy (avoid view)
+    historical_df = historical_df.dropna(subset=['Historical_Call_Volume']).copy()
+
     historical_df['Historical_Call_Volume'] = pd.to_numeric(historical_df['Historical_Call_Volume'], errors='coerce')
     historical_df = historical_df.dropna(subset=['Historical_Call_Volume']).copy()
 
