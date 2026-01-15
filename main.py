@@ -31,7 +31,11 @@ def main():
         contact_rate = lob_df['Annual_Contact_Rate'].dropna().mean()
 
         # Forecast membership
-        membership_forecast = forecast_membership(lob_df, periods=config['forecast']['membership_periods'])
+        membership_forecast = forecast_membership(
+            lob_df,
+            periods=config['forecast']['membership_periods'],
+            fallback_on_insufficient=False,
+        )
 
         # Monthly call volume
         monthly_forecast = forecast_call_volume(membership_forecast[['ds', 'yhat']], contact_rate)
