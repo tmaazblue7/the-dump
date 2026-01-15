@@ -1,0 +1,58 @@
+
+diff --git a/src/weekly_breakdown.py b/src/weekly_breakdown.py
+index 4c4c4c4..5d5d5d5 100644
+--- a/src/weekly_breakdown.py
++++ b/src/weekly_breakdown.py
+@@
+ import pandas as pd
++from typing import List
+ 
++def _get_month_weights(weekly_pattern: pd.DataFrame | pd.Series, month_num: int) -> List[float]:
++    """
++    Return a normalized list of 4 weekly weights for the given month.
++    Works whether weekly_pattern has a MultiIndex or a simple Index.
++    If more than 4 buckets exist, merge weeks 4+ into week 4.
++    If fewer than 4, pad with zeros and renormalize.
++    Falls back to equal weights if nothing is available or total == 0.
++    """
++    # Determine which months are present
++    if isinstance(weekly_pattern.index, pd.MultiIndex):
++        months_in_index = weekly_pattern.index.get_level_values(0).unique()
++    else:
++        months_in_index = weekly_pattern.index.unique()
++
++    if month_num in months_in_index:
++        # Slice the month
++        try:
++            row = weekly_pattern.loc[month_num]
++        except Exception:
++            # Defensive fallback
++            return [0.25, 0.25, 0.25, 0.25]
++
++        # Convert to a flat list of numbers
++        if isinstance(row, pd.DataFrame):
++            vals = row.squeeze().to_numpy().tolist()
++        elif isinstance(row, pd.Series):
++            vals = row.to_numpy().tolist()
++        else:
++            vals = list(row)
++    else:
++        return [0.25, 0.25, 0.25, 0.25]
++
++    # Coerce to 4 buckets
++    if len(vals) > 4:
++        vals = vals[:3] + [sum(vals[3:])]
++    elif len(vals) < 4:
++        vals = vals + [0.0] * (4 - len(vals))
++
++    total = sum(vals)
++    if total <= 0 or any(pd.isna(vals)):
++        return [0.25, 0.25, 0.25, 0.25]
++
++    # Normalize
++    return [v / total for v in vals]
++
+ def apply_weekly_seasonality(monthly_forecast, lob_df):
+@@
+-    weights = weekly_pattern.loc[month_num] if month_num in weekly_pattern.index.levels[0] else [0.25, 0.25, 0.25, 0.25]
++    weights = _get_month_weights(weekly_pattern, month_num)
